@@ -7,22 +7,17 @@ changeImgButton.addEventListener('click', changeImage);
 async function changeImage(e) {
 	let search = document.querySelector('.search-box');
 	let searchValue = search.value;
+	if (!searchValue) {
+		searchValue = 'point up';
+	}
 	e.preventDefault();
-	fetch(
+	const response = await fetch(
 		'https://api.giphy.com/v1/gifs/translate?api_key=U7U0b65VE1bA9GhsdHXTqW9M4ndypm7q&s=' +
 			searchValue,
-
 		{ mode: 'cors' }
-	)
-		.then(function (response) {
-			console.log(search.value);
-			return response.json();
-		})
-		.then(function (response) {
-			img.src = response.data.images.original.url;
-		})
-		.catch(function (err) {
-			console.log(err);
-		});
+	);
+	const imgData = await response.json();
+
+	img.src = imgData.data.images.original.url;
 }
-changeImage();
+document.addEventListener('DOMContentLoaded', changeImage);
